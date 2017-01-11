@@ -35,8 +35,7 @@ public class Branch {
 			pos = parent.pos + parent.dir * len;
 		}
 		
-		for(int i = 0; i < children.Count; i++)
-		{
+		for(int i = 0; i < children.Count; i++) {
 			children[i].RecalcPos(len*0.95f);
 		}
 	}
@@ -44,10 +43,8 @@ public class Branch {
 	public void Grow() {
 		if(length < max_length) {
 			length += Time.deltaTime*4;
-		}
-		else{
-			for(int i = 0; i < children.Count; i++)
-			{
+		} else {
+			for(int i = 0; i < children.Count; i++) {
 				children[i].Grow();
 			}
 		}
@@ -56,6 +53,8 @@ public class Branch {
 	}
 }
 
+//this struct is solely used by the function BuildTree in the LSystem class
+//its primary purpose is to facilitate the creation of branches via Turtle (move/rotate) method
 public struct BranchTurtle {
 	public Vector3 pos;
 	public Quaternion rot;
@@ -209,8 +208,6 @@ public class LSystem : MonoBehaviour {
 		turtle.currBranch = root;
 		
 		Stack<BranchTurtle> branch_stack = new Stack<BranchTurtle>();
-		float b_length = branch_length;
-		
 		for (int i = 0 ; i < sentence.Length; i++) {
 			if(sentence[i] == 'F') {
 				
@@ -224,12 +221,11 @@ public class LSystem : MonoBehaviour {
 				//keep track of the current branch and move the turtle
 				turtle.currBranch = next;
 				turtle.pos += turtle.rot * Vector3.up;
-	
 			} else if(sentence[i] == '+') {
-				Quaternion rotation = Quaternion.Euler(0, 0, min_angle);
+				Quaternion rotation = Quaternion.Euler(0, 0, Random.Range(min_angle, max_angle));
 				turtle.rot =  turtle.rot * rotation;
 			} else if(sentence[i] == '-') {
-				Quaternion rotation = Quaternion.Euler(0, 0, -min_angle);
+				Quaternion rotation = Quaternion.Euler(0, 0, -Random.Range(min_angle, max_angle));
 				turtle.rot =  turtle.rot * rotation;
 			} else if(sentence[i] == '[') {
 				branch_stack.Push(turtle);
@@ -238,6 +234,4 @@ public class LSystem : MonoBehaviour {
 			}
 		}
 	}
-	
-	
 }
